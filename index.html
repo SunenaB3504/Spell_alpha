@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spelling Adventure</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#4285f4">
+    <style>
+        h1, h2, .welcome-banner h2 {
+            font-family: 'Fredoka One', cursive;
+        }
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            animation: float 3s infinite alternate;
+            opacity: 0.7;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0); }
+            100% { transform: translateY(-10px) rotate(10deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="sparkle" style="top: 10px; left: 10%; font-size: 20px;">✨</div>
+            <div class="sparkle" style="top: 30px; right: 20%; font-size: 24px;">⭐</div>
+            <h1><i class="fas fa-book"></i> Spelling Adventure</h1>
+            <button id="settingsBtn" class="btn-icon"><i class="fas fa-cog"></i></button>
+        </header>
+        <main class="app-main">
+            <!-- Dashboard -->
+            <section id="dashboard" class="app-section active">
+                <div class="welcome-banner">
+                    <div class="sparkle" style="top: -20px; left: 30%; font-size: 28px;">✨</div>
+                    <div class="sparkle" style="top: 10px; right: 25%; font-size: 22px;">🌟</div>
+                    <h2>Welcome, Explorer!</h2>
+                    <p class="subtitle">Continue your magical spelling journey</p>
+                </div>
+                <div id="progress" class="progress-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-layer-group"></i>
+                        <div class="stat-info">
+                            <span class="stat-label">Level</span>
+                            <span id="level" class="stat-value">1</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-star"></i>
+                        <div class="stat-info">
+                            <span class="stat-label">Points</span>
+                            <span id="points" class="stat-value">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-gift"></i>
+                        <div class="stat-info">
+                            <span class="stat-label">Rewards</span>
+                            <span id="badges" class="stat-value">None</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="level-progress">
+                    <div class="level-progress-label">Progress to next level:</div>
+                    <div class="progress-bar-container">
+                        <div id="levelProgressBar" class="progress-bar" style="width: 0%"></div>
+                    </div>
+                    <div class="level-progress-info">
+                        <span id="currentPoints">0</span> / <span id="nextLevelPoints">100</span> points
+                    </div>
+                </div>
+                
+                <div class="level-selector">
+                    <div class="level-label">Choose Level:</div>
+                    <div class="level-buttons">
+                        <button id="level1Btn" class="level-btn active">Level 1</button>
+                        <button id="level2Btn" class="level-btn">Level 2</button>
+                        <button id="level3Btn" class="level-btn">Level 3</button>
+                    </div>
+                    <p class="level-info">Level 1: Basic Words (3-4 letters)<br>
+                       Level 2: Intermediate Words (4-5 letters)<br>
+                       Level 3: Advanced Words (5+ letters)
+                    </p>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="startAssessment" class="btn-primary"><i class="fas fa-clipboard-check"></i> Take Assessment</button>
+                    <button id="playGame" class="btn-secondary"><i class="fas fa-gamepad"></i> Play Spelling Bee</button>
+                    <button id="openGenerator" class="btn-tertiary"><i class="fas fa-magic"></i> Custom Words</button>
+                    <button id="openRewards" class="btn-reward"><i class="fas fa-gift"></i> Rewards Center</button>
+                </div>
+            </section>
+
+            <!-- Assessment -->
+            <section id="assessment" class="app-section hidden">
+                <div class="section-header">
+                    <h2><i class="fas fa-clipboard-check"></i> Spelling Assessment</h2>
+                    <div class="points-display">
+                        <i class="fas fa-star"></i> <span class="points-value">0</span> points
+                    </div>
+                </div>
+                <div class="card">
+                    <p class="instruction">Type the word you hear:</p>
+                    <div class="audio-player">
+                        <audio id="assessmentAudio" controls></audio>
+                        <button class="btn-icon replay-btn"><i class="fas fa-redo"></i></button>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="assessmentInput" placeholder="Type here" class="text-input">
+                        <button id="submitAssessment" class="btn-submit"><i class="fas fa-paper-plane"></i> Submit</button>
+                    </div>
+                    <p id="assessmentFeedback" class="feedback"></p>
+                </div>
+                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>
+
+            <!-- Spelling Bee Game -->
+            <section id="game" class="app-section hidden">
+                <div class="section-header">
+                    <h2><i class="fas fa-gamepad"></i> Spelling Bee</h2>
+                    <div class="points-display">
+                        <i class="fas fa-star"></i> <span class="points-value">0</span> points
+                    </div>
+                </div>
+                <div class="card">
+                    <p class="instruction">Listen and spell the word:</p>
+                    <div class="audio-player">
+                        <audio id="gameAudio" controls></audio>
+                        <button class="btn-icon replay-btn"><i class="fas fa-redo"></i></button>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="gameInput" placeholder="Type here" class="text-input">
+                        <button id="submitGame" class="btn-submit"><i class="fas fa-paper-plane"></i> Submit</button>
+                    </div>
+                    <p id="gameFeedback" class="feedback"></p>
+                    <button id="nextWord" class="btn-primary"><i class="fas fa-forward"></i> Next Word</button>
+                </div>
+                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>
+
+            <!-- Word Generator - New Section -->
+            <section id="wordGenerator" class="app-section hidden">
+                <div class="section-header">
+                    <h2><i class="fas fa-magic"></i> Word Generator</h2>
+                    <div class="points-display">
+                        <i class="fas fa-star"></i> <span class="points-value">0</span> points
+                    </div>
+                </div>
+                <div class="card">
+                    <p class="instruction">Enter any word to hear its pronunciation:</p>
+                    <div class="input-group">
+                        <input type="text" id="customWord" placeholder="Type any word" class="text-input">
+                        <button id="pronounceWord" class="btn-submit"><i class="fas fa-volume-up"></i> Pronounce</button>
+                    </div>
+                    <div class="ai-info">
+                        <i class="fas fa-robot"></i> 
+                        <p>Powered by AI Speech Technology</p>
+                    </div>
+                </div>
+                <div class="speech-status hidden">
+                    <p class="speech-supported-msg"><i class="fas fa-check-circle"></i> AI pronunciation is available on your device.</p>
+                    <p class="speech-not-supported-msg"><i class="fas fa-exclamation-triangle"></i> AI pronunciation is not supported by your browser. Using pre-recorded audio instead.</p>
+                </div>
+                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>
+
+            <!-- Settings -->
+            <section id="settings" class="app-section hidden">
+                <div class="section-header">
+                    <h2><i class="fas fa-cog"></i> Settings</h2>
+                    <div class="points-display">
+                        <i class="fas fa-star"></i> <span class="points-value">0</span> points
+                    </div>
+                </div>
+                <div class="card settings-card">
+                    <div class="setting-option">
+                        <label class="switch">
+                            <input type="checkbox" id="highContrast">
+                            <span class="slider round"></span>
+                        </label>
+                        <div class="setting-label">High Contrast</div>
+                    </div>
+                    <div class="setting-option">
+                        <label class="setting-label">Text Size:</label>
+                        <select id="textSize" class="select-dropdown">
+                            <option value="small">Small</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+                    <button id="saveSettings" class="btn-primary"><i class="fas fa-save"></i> Save</button>
+                </div>
+                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>
+            
+            <!-- Rewards Center - New Section -->
+            <section id="rewardsCenter" class="app-section hidden">
+                <h2><i class="fas fa-gift"></i> Rewards Center</h2>
+                <div class="card">
+                    <div class="current-points">
+                        <h3>Your Points: <span id="rewardPoints">0</span></h3>
+                    </div>
+                    <p class="instruction">Collect points by spelling words correctly to earn these rewards!</p>
+                    
+                    <div class="rewards-grid" id="rewardsGrid"></div>
+                    
+                    <div class="reward-info">
+                        <p><i class="fas fa-info-circle"></i> When you have enough points, click on a reward to claim it. 
+                        Show the confirmation screen to your parent to receive your reward!</p>
+                    </div>
+                </div>
+                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>
+        </main>
+        <footer class="app-footer">
+            <p>© 2025 Spelling Adventure by SDS-GenAlpha | <span class="ai-badge"><i class="fas fa-brain"></i> AI Powered</span></p>
+        </footer>
+    </div>
+    
+    <!-- Fix script loading order and add debugging -->
+    <script>
+        // This helps identify if the scripts are loading correctly
+        console.log('HTML loaded, initializing scripts');
+        
+        // Add global click debugging to see if clicks are being registered
+        document.addEventListener('click', function(e) {
+            console.log('Click detected on:', e.target);
+        }, false);
+
+        // Register the service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+    </script>
+    <!-- Load services and utilities first -->
+    <script src="js/speechService.js"></script>
+    <script src="js/wordLists.js"></script>
+
+    <!-- Load application modules in correct order -->
+    <script src="js/core.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/rewards.js"></script>
+    <script src="js/assessment.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/settings.js"></script>
+
+    <!-- Remove the original script.js as it's now split into modules -->
+    <!-- <script src="script.js"></script> -->
+</body>
+</html>
